@@ -46,17 +46,15 @@ class RecipientController {
     if (!(await schema.isValid(req.body))) {
       return res.status(400).json({ error: 'Validation fails.' });
     }
-    const recipientExists = await Recipient.findOne({
-      where: req.body,
-    });
+    const recipientExists = await Recipient.findByPk(req.params.id);
 
     if (!recipientExists) {
       return res.status(404).json({ error: 'Recipient does not found.' });
     }
 
-    const recipient = Recipient.update(req.body);
+    const { id, name } = await recipientExists.update(req.body);
 
-    return res.json(recipient);
+    return res.json({ id, name });
   }
 }
 
