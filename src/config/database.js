@@ -1,10 +1,10 @@
 module.exports = {
   dialect: 'postgres',
-  host: process.env.DB_HOST,
-  username: process.env.DB_USER,
+  host: 'localhost',
+  username: 'luan',
   port: '5433',
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
+  password: 'docker',
+  database: 'fastfeet',
   define: {
     timestamps: true,
     underscored: true,
