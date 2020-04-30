@@ -25,15 +25,15 @@ class DelivererController {
           ? { email }
           : {
               name: {
-                [Op.regexp]: `${name.substr(0, 1)}|${name
+                [Op.regexp]: `[${name.substr(0, 1).toLowerCase()}|${name
                   .substr(0, 1)
-                  .toUpperCase()}+${name.substr(1)}`,
+                  .toUpperCase()}]${name.substr(1)}`,
               },
             },
         order: ['id'],
         limit: 20,
         offset: (page - 1) * 20,
-        attributes: ['id', 'email', 'name', 'avatar_id'],
+        attributes: ['id', 'email', 'name'],
         include: [
           {
             model: File,
@@ -47,7 +47,7 @@ class DelivererController {
         order: ['id'],
         limite: 20,
         offset: (page - 1) * 20,
-        attributes: ['id', 'email', 'name', 'avatar_id'],
+        attributes: ['id', 'email', 'name'],
         include: [
           {
             model: File,
@@ -67,7 +67,7 @@ class DelivererController {
     const { id } = req.params;
     const deliverer = await await Deliverer.findOne({
       where: { id },
-      attributes: ['id', 'email', 'name', 'avatar_id'],
+      attributes: ['id', 'email', 'name'],
       include: [
         {
           model: File,
@@ -111,6 +111,7 @@ class DelivererController {
     const schema = Yup.object().shape({
       name: Yup.string(),
       email: Yup.string().email(),
+      avatar_id: Yup.number(),
     });
 
     if (!(await schema.isValid(req.body))) {
@@ -121,7 +122,6 @@ class DelivererController {
     const deliverer = await Deliverer.findByPk(req.params.id);
 
     if (email && email !== deliverer.email) {
-      console.log(email, deliverer.email);
       const delivererExists = await Deliverer.findOne({
         where: { email },
       });
